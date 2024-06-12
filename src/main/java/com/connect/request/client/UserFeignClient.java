@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 @FeignClient(name = "users", path = "/api/v1/")
 public interface UserFeignClient {
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable("id") Long id, @RequestHeader("internal-correlation-id") String correlationId);
+    public User getUserById(@PathVariable("id") Long id, @RequestHeader(name = "internal-correlation-id", required = false) String correlationId);
 
 }
