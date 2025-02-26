@@ -1,5 +1,6 @@
 package com.connect.request.entity;
 
+import com.connect.order.client.model.CartItem;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -30,4 +31,12 @@ public class OrderItem {
 
     @Column(name = "price")
     private Integer price;
+
+    public static OrderItem fromCartItem(final CartItem cartItem) {
+        return OrderItem.builder()
+                .productId(cartItem.getProduct().getId())
+                .quantity(cartItem.getQuantity())
+                .price(cartItem.getProduct().getPrice())
+                .build();
+    }
 }

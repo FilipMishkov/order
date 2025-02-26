@@ -15,8 +15,8 @@ import com.connect.request.service.OrderService;
 import java.util.List;
 
 @Tag(
-        name = "CRUD REST APIs for Orders",
-        description = "CRUD REST APIs for Orders to CREATE, UPDATE, FETCH AND DELETE orders details"
+    name = "CRUD REST APIs for Orders",
+    description = "CRUD REST APIs for Orders to CREATE, UPDATE, FETCH AND DELETE orders details"
 )
 @RestController
 @RequestMapping("/api/v1/")
@@ -33,8 +33,8 @@ public class OrderController {
     )
     @GetMapping("/")
     public List<OrderDto> getAllOrders(@RequestHeader(name = "internal-correlation-id", required = false) String correlationId) {
-        log(correlationId, "getAllRequests");
-        return orderService.findAllRequests();
+        log(correlationId, "getAllOrders");
+        return orderService.findAllOrders();
     }
 
 
@@ -43,9 +43,9 @@ public class OrderController {
             description = "Get all orders a user has made"
     )
     @GetMapping("/user/{userId}")
-    public List<OrderDto> getOrderByUserId(@PathVariable("userId") Long userId, @RequestHeader(name = "internal-correlation-id", required = false) String correlationId) {
+    public List<OrderDto> getOrdersByUserId(@PathVariable("userId") Long userId, @RequestHeader(name = "internal-correlation-id", required = false) String correlationId) {
         log(correlationId, "getRequestByUserId");
-        return orderService.findOrderByUserId(userId, correlationId);
+        return orderService.findOrdersByUserId(userId, correlationId);
     }
 
     @Operation(
@@ -58,27 +58,26 @@ public class OrderController {
         return orderService.findOrderById(id);
     }
 
-    @Operation(
-            summary = "Create Orders REST API",
-            description = "Create new order"
-    )
-    @PostMapping("/")
-    public OrderDto saveOrder(@Valid @RequestBody CreateOrderDto createOrderDto, @RequestHeader(name = "internal-correlation-id", required = false) String correlationId) {
-        log(correlationId, "saveRequest");
-        return orderService.saveOrder(createOrderDto, correlationId);
-    }
+   @Operation(
+           summary = "Create Orders REST API",
+           description = "Create new order"
+   )
+   @PostMapping("/")
+   public OrderDto createOrder(@Valid @RequestBody CreateOrderDto createOrderDto, @RequestHeader(name = "internal-correlation-id", required = false) String correlationId) {
+       log(correlationId, "saveRequest");
+       return orderService.createOrder(createOrderDto, correlationId);
+   }
 
     @Operation(
-            summary = "Update Orders REST API",
-            description = "Update an existing order"
+            summary = "Update Order Status REST API",
+            description = "Update the status of an existing order"
     )
-    @PutMapping("/{id}")
-    public OrderDto updateOrder(
-            @PathVariable("id") Long id,
-            @Valid @RequestBody OrderDto orderDto,
-            @RequestHeader(name = "internal-correlation-id", required = false) String correlationId) {
-        log(correlationId, "updateRequest");
-        return orderService.updateOrder(id, orderDto, correlationId);
+    @PutMapping("/{id}/status")
+    public OrderDto updateOrderStatus(@PathVariable("id") Long id,
+                                      @RequestBody String status,
+                                      @RequestHeader(name = "internal-correlation-id", required = false) String correlationId) {
+        log(correlationId, "updateOrderStatus");
+        return orderService.updateOrderStatus(id, status);
     }
 
     @Operation(
