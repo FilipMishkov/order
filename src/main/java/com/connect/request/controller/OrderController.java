@@ -5,9 +5,9 @@ import com.connect.request.dto.OrderDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import com.connect.request.service.OrderService;
@@ -21,11 +21,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/")
 @Validated
+@AllArgsConstructor
 public class OrderController {
 
     private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
-    @Autowired
-    private OrderService orderService;
+    private final OrderService orderService;
 
     @Operation(
             summary = "Get Orders REST API",
@@ -65,7 +65,12 @@ public class OrderController {
    @PostMapping("/")
    public OrderDto createOrder(@Valid @RequestBody CreateOrderDto createOrderDto, @RequestHeader(name = "internal-correlation-id", required = false) String correlationId) {
        log(correlationId, "saveRequest");
-       return orderService.createOrder(createOrderDto, correlationId);
+       try {
+           return orderService.createOrder(createOrderDto, correlationId);
+       } catch (Exception e) {
+           logger.error("Error creating order: {}", e.getMessage());
+           return null;
+       }
    }
 
     @Operation(

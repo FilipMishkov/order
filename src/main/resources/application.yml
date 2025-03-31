@@ -2,7 +2,7 @@ spring:
   application:
     name: "requests"
   datasource:
-    url: jdbc:mysql://localhost:3307/requestsdb
+    url: jdbc:mysql://localhost:3307/ordersdb
     username: root
     password: root
   sql:
